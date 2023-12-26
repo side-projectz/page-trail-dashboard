@@ -8,8 +8,8 @@ import { customDeepMerger } from '../utils';
 // const $REDIS_CLIENT = new Redis(process.env.REDIS_URL as string);
 
 const $REDIS_CLIENT = new Redis({
-  url: 'https://apn1-crisp-collie-33322.upstash.io',
-  token: 'AYIqACQgODk0ZjRkNGItNjU5OS00NTk3LWI4NTgtMzJjNjY4Y2FiNTEzZmE2MmM2ZmMxZWQ2NDY0MWEzZmZiMmJhMGMxOWRmOWU=',
+  url: process.env.REDIS_URL as string,
+  token: process.env.REDIS_TOKEN as string,
 })
 
 

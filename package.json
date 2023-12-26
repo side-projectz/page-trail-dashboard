@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tailwindcss/forms": "^0.5.7",
     "@upstash/redis": "^1.27.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
@@ -16,6 +17,7 @@
     "ioredis": "^5.3.2",
     "lucide-react": "^0.302.0",
     "next": "14.0.4",
+    "next-auth": "^4.24.5",
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^2.2.0",
