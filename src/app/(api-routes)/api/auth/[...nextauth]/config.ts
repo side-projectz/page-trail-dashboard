@@ -23,7 +23,7 @@ export const authOptions: NextAuthOptions = {
     //       prompt: 'consent',
     //     }
     //   },
-    // }),
+    // })
     CredentialsProvider({
       name: "Credentials",
       credentials: {
