@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
 
     if (!email) throw new Error("Email is required");
     if (Array.isArray(email)) throw new Error("Email should be a string");
+    if(typeof email !== "string") throw new Error("Email should be a string");
 
     if (!newRecords) throw new Error("New Records is required");
 
