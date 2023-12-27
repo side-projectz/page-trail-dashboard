@@ -71,6 +71,7 @@ export async function addUserRecord(email: string, newRecords: Domain[]) {
   try {
     const updatedUserRecords = customDeepMerger(userDetails ?? [], newRecords);
 
+    if(typeof email !== "string") throw new Error("Email should be a string");
     const res = await $REDIS_CLIENT.set(email, updatedUserRecords);
 
     return {
@@ -86,6 +87,8 @@ export async function addUserRecord(email: string, newRecords: Domain[]) {
 // Shared ================================
 
 async function checkUserExists(email: string) {
+  if(typeof email !== "string") throw new Error("Email should be a string");
+
   const userExists: Domain[] | null = await $REDIS_CLIENT.get(email);
   if (!!userExists === false) {
     throw new Error("User not found");
