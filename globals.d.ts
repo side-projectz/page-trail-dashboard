@@ -5,13 +5,15 @@ interface APIResponse<T> {
 }
 
 
-interface Domain {
-  domainName: string
-  pages: Page[]
-}
-
 interface Page {
-  lastVisited: number
-  page: string
-  timeSpent: number
+  openedAt: number;
+  page: string;
+  timeSpent: number;
+  domain: string;
+  meta: {
+    title: string;
+    description: string;
+    tags?: string[];
+  };
+  lastVisited: number;
 }

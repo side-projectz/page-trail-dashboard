@@ -4,6 +4,7 @@
 
 import { Redis } from '@upstash/redis'
 import { customDeepMerger } from '../utils';
+import { Domain } from '../utils';
 
 // const $REDIS_CLIENT = new Redis(process.env.REDIS_URL as string);
 
