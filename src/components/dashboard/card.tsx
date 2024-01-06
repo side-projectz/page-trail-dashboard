@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 export type DashboardCardProps = {
   title: string;
   icon?: React.ReactNode;
-  content: string;
+  content: string | number;
   footer?: string;
 }
 

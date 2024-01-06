@@ -25,7 +25,7 @@ const DevLog = (props: {
     <Dialog>
       <DialogTrigger asChild>
         <Button
-          className="absolute bottom-10 right-10"
+          className="absolute z-50 bottom-10 right-10"
           variant="outline"
         > View JSON </Button>
       </DialogTrigger>

@@ -7,8 +7,8 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  url       = env("DB_POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("DB_POSTGRES_URL_NON_POOLING") // uses a direct connection
+  url       = env("DB_SUPABASE_URL") // uses connection pooling
+  // directUrl = env("DB_POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 model User {
@@ -63,5 +63,5 @@ model Site {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
-  @@unique([pageId, userId])
+  @@unique([pageId, userId, startDateTime, endDateTime])
 }

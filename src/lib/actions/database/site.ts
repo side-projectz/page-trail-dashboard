@@ -1,6 +1,5 @@
 import { ISite } from "@/lib/interface";
 import prisma from "@/lib/prisma";
-import exp from "constants";
 
 export async function getAllSites(): Promise<ISite[]> {
   try {
@@ -17,6 +16,21 @@ export async function getAllSites(): Promise<ISite[]> {
 
 export async function addSite(site: ISite): Promise<ISite> {
   try {
+
+    const alreadyExist = await prisma.site.findFirst({
+      where: {
+        pageId: site.pageId,
+        domainId: site.domainId,
+        userId: site.userId,
+        startDateTime: site.startDateTime,
+        endDateTime: site.endDateTime
+      }
+    })
+
+    if(alreadyExist) {
+      return alreadyExist as ISite;
+    };
+
     const siteRes = await prisma.site.create({
       data: site
     });

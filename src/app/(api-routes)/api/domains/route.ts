@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { addDomain, getAllDomains } from "@/lib/actions/database/domain";
 import { IDomain } from "@/lib/interface";
-import { I } from "@upstash/redis/zmscore-a4ec4c2a";
 
 export async function GET(req: Request) {
   try {
