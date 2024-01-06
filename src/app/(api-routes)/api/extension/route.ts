@@ -52,6 +52,8 @@ export async function POST(req: NextRequest) {
       })
     }
 
+    console.log('User Records Updated')
+    
     return NextResponse.json({
       message: "User Records Updated",
       data: null,
