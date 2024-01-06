@@ -42,6 +42,21 @@ export async function getPageById(id: string): Promise<IPage> {
   }
 }
 
+export async function getPageByUrl(url: string): Promise<IPage> {
+  try {
+    const page = await prisma.page.findUnique({
+      where: {
+        url: url
+      }
+    });
+
+    return page as IPage;
+  } catch (error: any) {
+    console.log(error)
+    throw new Error(error.message);
+  }
+}
+
 export async function updatePageById(id: string, page: IPage): Promise<IPage> {
   try {
     const pageRes = await prisma.page.update({

@@ -15,7 +15,7 @@ export interface IDomain {
 
 
 export interface IPage {
-  id: string
+  id?: string
   domainId: string,
   url: string,
   meta_title: string,
@@ -27,7 +27,7 @@ export interface IPage {
 
 
 export interface ISite {
-  id: string
+  id?: string
   pageId: string,
   domainId: string,
   userId: string,
