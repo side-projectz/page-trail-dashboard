@@ -3,8 +3,8 @@
 // import { Redis } from "ioredis";
 
 import { Redis } from '@upstash/redis'
-import { customDeepMerger } from '../utils';
-import { Domain } from '../utils';
+import { customDeepMerger } from "../merger";
+import { Domain } from '../merger';
 
 // const $REDIS_CLIENT = new Redis(process.env.REDIS_URL as string);
 
@@ -62,7 +62,7 @@ export async function addUserRecord(email: string, newRecords: Domain[]) {
   let userDetails: Domain[] | null = null;
   try {
     userDetails = await checkUserExists(email);
-  } catch (error:any) {
+  } catch (error: any) {
     if (error.message === "User not found") {
       await $REDIS_CLIENT.set(email, []);
       userDetails = [];
@@ -72,7 +72,7 @@ export async function addUserRecord(email: string, newRecords: Domain[]) {
   try {
     const updatedUserRecords = customDeepMerger(userDetails ?? [], newRecords);
 
-    if(typeof email !== "string") throw new Error("Email should be a string");
+    if (typeof email !== "string") throw new Error("Email should be a string");
     const res = await $REDIS_CLIENT.set(email, updatedUserRecords);
 
     return {
@@ -85,10 +85,22 @@ export async function addUserRecord(email: string, newRecords: Domain[]) {
   }
 }
 
+export async function getAllUsers() {
+  const users = await $REDIS_CLIENT.keys("*");
+  const usersData = await $REDIS_CLIENT.mget(users);
+  const usersDataParsed = users.map((user: unknown, index) => ({ email: user as string, records: usersData[index] }))
+  
+  return {
+    message: "All Users",
+    data: usersDataParsed,
+    status: 200
+  };
+}
+
 // Shared ================================
 
 async function checkUserExists(email: string) {
-  if(typeof email !== "string") throw new Error("Email should be a string");
+  if (typeof email !== "string") throw new Error("Email should be a string");
 
   const userExists: Domain[] | null = await $REDIS_CLIENT.get(email);
   if (!!userExists === false) {
