@@ -1,4 +1,5 @@
 import { syncUserRecords } from "@/lib/actions/database/common";
+import { getUserDetails } from "@/lib/actions/database/user";
 import { addUserRecord, getUserRecords } from "@/lib/actions/redis";
 import prisma from "@/lib/prisma";
 import { Page, Domain } from "@prisma/client";
@@ -37,6 +38,15 @@ export async function POST(req: NextRequest) {
 
     if (!newRecords) throw new Error("New Records is required");
 
+    const userDetail = await getUserDetails(email);
+    if (!userDetail) {
+      await prisma.user.create({
+        data: {
+          email
+        }
+      })
+    }
+
     const pages = newRecords.map((record: any) => record.pages).flat();
 
     for (const site of pages) {
@@ -53,7 +63,7 @@ export async function POST(req: NextRequest) {
     }
 
     console.log('User Records Updated')
-    
+
     return NextResponse.json({
       message: "User Records Updated",
       data: null,
