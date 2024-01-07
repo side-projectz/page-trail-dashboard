@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DB_SUPABASE_URL") // uses connection pooling
+  // directUrl = env("DB_POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  image     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Site      Site[]
+}
+
+model Domain {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Site      Site[]
+  Page      Page[]
+}
+
+model Page {
+  domainId String
+  domain   Domain @relation(fields: [domainId], references: [id])
+
+  id               String  @id @default(cuid())
+  url              String  @unique
+  meta_title       String?
+  meta_description String?
+  meta_image       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Site      Site[]
+}
+
+model Site {
+  id     String @id @default(cuid())
+  startDateTime DateTime
+  endDateTime   DateTime
+
+  pageId String
+  page   Page   @relation(fields: [pageId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  Domain    Domain?   @relation(fields: [domainId], references: [id])
+  domainId  String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([pageId, userId, startDateTime, endDateTime])
+}
