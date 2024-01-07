@@ -17,7 +17,7 @@ export function MainNav({
         Overview
       </Link>
       <Link
-        href="/dashboard"
+        href="/domain"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Customers

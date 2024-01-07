@@ -29,7 +29,7 @@ export default async function Dashboard() {
     {
       title: 'Sites',
       content: siteCount.length,
-      icon: <DollarSign size={24} />,
+      icon: <DollarSign size={24} />
     }
   ];
 
@@ -63,21 +63,13 @@ export default async function Dashboard() {
               <CardTitle>Domain</CardTitle>
             </CardHeader>
             <CardContent className="pl-2">
-              <DashboardChart/>
+              <DashboardChart />
             </CardContent>
           </Card>
 
-
         </div>
 
-
       </div>
-
-
-
-
-
-      <DevLog title="Redis Users" data={(usersCount)} />
     </>
   );
 

@@ -7,7 +7,7 @@ export default async function Home() {
 
   return (
     <>
-      <Header />
+      <h1>Home</h1>
     </>
   )
 }

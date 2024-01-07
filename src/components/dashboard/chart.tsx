@@ -1,6 +1,6 @@
 'use client';
 
-import { Bar, BarChart, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 
 const data = [
   {
@@ -54,13 +54,14 @@ const data = [
 ]
 
 type DashboardChartProps = {
-  data?: object;
+  data: Record<string, any>[];
   xAxisKey?: string;
   yAxisKey?: string;
-  valueKey?: string;
+  yAxisFormatter?: (value: any) => string;
+  valueKey: string;
 }
 
-export default function DashboardChart(props: DashboardChartProps) {
+export default function DashboardDemoChart() {
 
   return (
     <ResponsiveContainer width="100%" height={350}>
@@ -79,6 +80,7 @@ export default function DashboardChart(props: DashboardChartProps) {
           axisLine={false}
           tickFormatter={(value) => `${value}`}
         />
+        <Tooltip />
         <Bar
           dataKey="total"
           fill="currentColor"
@@ -89,4 +91,36 @@ export default function DashboardChart(props: DashboardChartProps) {
     </ResponsiveContainer >
   );
 
+}
+
+
+export function DashboardBarChart(props: DashboardChartProps) {
+  return (
+    <ResponsiveContainer width="100%" height={350}>
+      <BarChart data={props.data}>
+        <XAxis
+          dataKey={props.xAxisKey}
+          stroke="#888888"
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+        />
+        <YAxis
+          dataKey={props.yAxisKey}
+          stroke="#888888"
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+          tickFormatter={props.yAxisFormatter || ((value) => `${value}`)}
+        />
+        <Tooltip />
+        <Bar
+          dataKey={props.valueKey}
+          fill="currentColor"
+          radius={[4, 4, 0, 0]}
+          className="fill-primary"
+        />
+      </BarChart>
+    </ResponsiveContainer >
+  );
 }
