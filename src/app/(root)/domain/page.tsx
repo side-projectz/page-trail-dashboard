@@ -9,11 +9,10 @@ import prisma from "@/lib/prisma";
 import { DollarSign, Globe, User } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DashboardBarChart } from "@/components/dashboard/chart";
-import DashboardDemoChart from "@/components/dashboard/chart";
 import { formatTime } from "@/lib/utils";
 
 
-export default async function Domain() {
+export default async function DomainDashboard() {
 
   const domains = await getAllDomains();
   const pages = await getAllPages();

@@ -51,8 +51,11 @@ export async function getUserDetails(email: string): Promise<IUser> {
   }
 }
 
-export async function getUserById(id: string): Promise<IUser> { 
+export async function getUserById(id: string): Promise<IUser> {
   try {
+    if (typeof id !== "string") throw new Error("Id should be a string");
+    if (!id || id.trim() === '') throw new Error("Id is required");
+
     const user = await prisma.user.findUnique({
       where: {
         id: id
@@ -66,7 +69,7 @@ export async function getUserById(id: string): Promise<IUser> {
   }
 }
 
-export async function updateUserById(id: string, user: IUser): Promise<IUser> { 
+export async function updateUserById(id: string, user: IUser): Promise<IUser> {
   try {
     const userRes = await prisma.user.update({
       where: {

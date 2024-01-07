@@ -7,8 +7,10 @@ import { getAllSites } from "@/lib/actions/database/site";
 import { getAllUsers } from "@/lib/actions/database/user";
 import DashboardChart from "@/components/dashboard/chart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DashboardTable } from "@/components/dashboard/table";
+import { UserDashboardTable } from "@/components/dashboard/users/table";
 
-export default async function Dashboard() {
+export default async function UsersDashboard() {
 
   const usersCount = await getAllUsers();
   const domainCount = await getAllDomains();
@@ -47,28 +49,14 @@ export default async function Dashboard() {
           <DashboardCard  {...cards[2]} />
         </div>
 
-        <div className="grid gap-4 grid-cols-2 md:grid-cols-2">
-
-          <Card className="col-span-1">
-            <CardHeader>
-              <CardTitle>Users</CardTitle>
-            </CardHeader>
-            <CardContent className="pl-2">
-              <DashboardChart />
-            </CardContent>
-          </Card>
-          <Card className="col-span-1">
-            <CardHeader>
-              <CardTitle>Domain</CardTitle>
-            </CardHeader>
-            <CardContent className="pl-2">
-              <DashboardChart />
-            </CardContent>
-          </Card>
-
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-1">
+          <UserDashboardTable data={usersCount.slice(0, 10)} />
         </div>
 
+
       </div>
+
+      <DevLog data={usersCount} title="users" />
     </>
   );
 

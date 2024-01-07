@@ -51,6 +51,7 @@
     "date-fns": "^3.1.0",
     "deepmerge": "^4.3.1",
     "embla-carousel-react": "^8.0.0-rc18",
+    "gantt-task-react": "^0.3.9",
     "ioredis": "^5.3.2",
     "lodash": "^4.17.21",
     "lucide-react": "^0.306.0",

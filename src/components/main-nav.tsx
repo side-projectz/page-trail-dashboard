@@ -20,13 +20,13 @@ export function MainNav({
         href="/domain"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Customers
+        Domain
       </Link>
       <Link
-        href="/dashboard"
+        href="/users"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Products
+        Users
       </Link>
       <Link
         href="/dashboard"
