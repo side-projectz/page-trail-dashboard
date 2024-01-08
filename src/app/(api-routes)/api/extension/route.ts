@@ -1,9 +1,11 @@
 import { syncUserRecords } from "@/lib/actions/database/common";
 import { getUserDetails } from "@/lib/actions/database/user";
-import { addUserRecord, getUserRecords } from "@/lib/actions/redis";
+import { getUserRecords } from "@/lib/actions/redis";
 import prisma from "@/lib/prisma";
-import { Page, Domain } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+
+export const maxDuration = 200;
+export const dynamic = 'force-dynamic';
 
 export async function GET(req: Request) {
   try {
