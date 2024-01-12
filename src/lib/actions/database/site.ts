@@ -23,7 +23,8 @@ export async function addSite(site: ISite): Promise<ISite> {
         domainId: site.domainId,
         userId: site.userId,
         startDateTime: site.startDateTime,
-        endDateTime: site.endDateTime
+        endDateTime: site.endDateTime,
+        timeZone: site.timeZone ?? 'Asia/Calcutta'
       }
     })
 

@@ -20,7 +20,7 @@ export interface IPage {
   url: string,
   meta_title: string,
   meta_description: string,
-  meta_image: string,  
+  meta_image: string,
   createdAt: Date,
   updatedAt: Date
 }
@@ -33,4 +33,5 @@ export interface ISite {
   userId: string,
   startDateTime: Date
   endDateTime: Date
+  timeZone: string
 }

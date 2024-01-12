@@ -13,6 +13,7 @@ type syncUserRecordsBody = {
   userId: string;
   startDateTime: string;
   endDateTime: string;
+  timeZone: string;
 }
 
 
@@ -51,8 +52,9 @@ export async function syncUserRecords(email: string, body: syncUserRecordsBody) 
       pageId,
       domainId,
       userId: userDetails.id,
-      startDateTime: new Date(+startDateTime),
-      endDateTime: new Date(+endDateTime)
+      startDateTime: new Date(startDateTime),
+      endDateTime: new Date(endDateTime),
+      timeZone: body.timeZone,
     }
 
     const siteRes = await addSite(site);

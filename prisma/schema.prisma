@@ -50,6 +50,8 @@ model Site {
   id     String @id @default(cuid())
   startDateTime DateTime
   endDateTime   DateTime
+  timeZone      String    // Add timeZone column
+
 
   pageId String
   page   Page   @relation(fields: [pageId], references: [id])
@@ -57,8 +59,8 @@ model Site {
   userId String
   user   User   @relation(fields: [userId], references: [id])
 
-  Domain    Domain?   @relation(fields: [domainId], references: [id])
-  domainId  String?
+  Domain    Domain   @relation(fields: [domainId], references: [id])
+  domainId  String
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
