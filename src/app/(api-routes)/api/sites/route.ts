@@ -27,10 +27,15 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { url, meta_title, meta_description, meta_image, domain_name, userId } = body;
-    const { startDateTime, endDateTime } = body
+    const { startDateTime, endDateTime, timeZone } = body
 
     if (!userId) throw new Error("User Id is required");
     if (userId && typeof userId !== "string") throw new Error("User Id should be a string");
+
+    if(!startDateTime) throw new Error("Start Date Time is required");
+    if(!endDateTime) throw new Error("End Date Time is required");
+
+    if(!timeZone) throw new Error("Time Zone is required");
 
     const userDetails = await getUserDetails(userId);
 
@@ -55,7 +60,12 @@ export async function POST(req: Request) {
     if (!pageId) throw new Error("Page Url not found");
 
     const site: ISite = {
-      pageId, domainId, userId: userDetails.id, startDateTime, endDateTime
+      pageId,
+      domainId,
+      userId: userDetails.id,
+      startDateTime,
+      endDateTime,
+      timeZone: timeZone,
     }
 
     const siteRes = await addSite(site);
