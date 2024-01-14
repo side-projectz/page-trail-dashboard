@@ -1,14 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DB_SUPABASE_URL") // uses connection pooling
-  // directUrl = env("DB_POSTGRES_URL_NON_POOLING") // uses a direct connection
+  provider = "postgresql"
+  url      = env("DB_SUPABASE_URL")
 }
 
 model User {
@@ -16,54 +12,47 @@ model User {
   email     String   @unique
   name      String?
   image     String?
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
   isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
   Site      Site[]
 }
 
 model Domain {
   id        String   @id @default(cuid())
   name      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Site      Site[]
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
   Page      Page[]
+  Site      Site[]
 }
 
 model Page {
-  domainId String
-  domain   Domain @relation(fields: [domainId], references: [id])
-
-  id               String  @id @default(cuid())
-  url              String  @unique
+  domainId         String
+  id               String   @id @default(cuid())
+  url              String   @unique
   meta_title       String?
   meta_description String?
   meta_image       String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Site      Site[]
+  createdAt        DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt        DateTime @updatedAt @db.Timestamptz(3)
+  domain           Domain   @relation(fields: [domainId], references: [id])
+  Site             Site[]
 }
 
 model Site {
-  id     String @id @default(cuid())
-  startDateTime DateTime
-  endDateTime   DateTime
-  timeZone      String    // Add timeZone column
-
-
-  pageId String
-  page   Page   @relation(fields: [pageId], references: [id])
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  Domain    Domain   @relation(fields: [domainId], references: [id])
-  domainId  String
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id            String   @id @default(cuid())
+  domainId      String
+  userId        String
+  createdAt     DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime @updatedAt @db.Timestamptz(3)
+  endDateTime   DateTime @db.Timestamptz(3)
+  pageId        String
+  startDateTime DateTime @db.Timestamptz(3)
+  timeZone      String?
+  Domain        Domain   @relation(fields: [domainId], references: [id])
+  page          Page     @relation(fields: [pageId], references: [id])
+  user          User     @relation(fields: [userId], references: [id])
 
   @@unique([pageId, userId, startDateTime, endDateTime])
 }

@@ -11,8 +11,8 @@ type syncUserRecordsBody = {
   meta_image: string;
   domain_name: string;
   userId: string;
-  startDateTime: string;
-  endDateTime: string;
+  startDateTime: Date |string ;
+  endDateTime: Date | string;
   timeZone: string;
 }
 
@@ -37,10 +37,8 @@ export async function syncUserRecords(email: string, body: syncUserRecordsBody) 
     if (typeof domain_name !== "string") throw new Error("Domain Name should be a string");
 
     if (!startDateTime) throw new Error("Start Date Time is required");
-    if (startDateTime && typeof startDateTime !== "string") throw new Error("Start Date Time should be a string");
 
     if (!endDateTime) throw new Error("End Date Time is required");
-    if (endDateTime && typeof endDateTime !== "string") throw new Error("End Date Time should be a string");
 
     const domainId = await getDomainId(domain_name);
     if (!domainId) throw new Error("Domain Name not found");
@@ -52,24 +50,18 @@ export async function syncUserRecords(email: string, body: syncUserRecordsBody) 
       pageId,
       domainId,
       userId: userDetails.id,
-      startDateTime: new Date(startDateTime),
-      endDateTime: new Date(endDateTime),
+      startDateTime: typeof startDateTime === "string" ? new Date(startDateTime) : startDateTime,
+      endDateTime:  typeof endDateTime === "string" ? new Date(endDateTime) : endDateTime,
       timeZone: body.timeZone,
     }
 
     const siteRes = await addSite(site);
 
     return siteRes;
-    // return NextResponse.json(siteRes);
 
   } catch (error: any) {
     console.log(error)
     throw new Error(error.message);
-    // return NextResponse.json({
-    //   message: "Error adding page records, " + error.message,
-    //   data: error,
-    //   status: 500
-    // });
   }
 }
 

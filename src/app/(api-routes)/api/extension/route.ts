@@ -1,12 +1,13 @@
 import { syncUserRecords } from "@/lib/actions/database/common";
 import { getUserDetails } from "@/lib/actions/database/user";
 import prisma from "@/lib/prisma";
+import _ from "lodash";
 import { NextRequest, NextResponse } from "next/server";
 
 export const maxDuration = 200;
 export const dynamic = 'force-dynamic';
 
-export async function GET(req:Request){
+export async function GET(req: Request) {
   return NextResponse.json({
     status: 200,
     message: 'API is working',
@@ -24,8 +25,11 @@ export async function POST(req: NextRequest) {
     const timeZone = body?.timeZone;
 
     if (!email) throw new Error("Email is required");
-    if (Array.isArray(email)) throw new Error("Email should be a string");
     if (typeof email !== "string") throw new Error("Email should be a string");
+
+    if (!timeZone) throw new Error("Time Zone is required");
+    if (typeof timeZone !== "string") throw new Error("Time Zone should be a string");
+    if (!Intl.DateTimeFormat().resolvedOptions().timeZone.includes(timeZone)) throw new Error("Invalid Time Zone");
 
     if (!newRecords) throw new Error("New Records is required");
 
@@ -41,15 +45,19 @@ export async function POST(req: NextRequest) {
     const pages = newRecords.map((record: any) => record.pages).flat();
 
     for (const site of pages) {
+
+      const _startTime = formattedDate(site.openedAt, timeZone);
+      const _endTime = formattedDate(site.lastVisited, timeZone);
+
       const res = await syncUserRecords(email, {
         url: site.page,
         meta_title: site.meta.title,
         meta_description: site.meta.description,
-        meta_image: '',
+        meta_image: site.meta.image || '',
         domain_name: site.domain,
         userId: email,
-        startDateTime: new Date(site.openedAt).toISOString(),
-        endDateTime: new Date(site.lastVisited).toISOString(),
+        startDateTime: _startTime,
+        endDateTime: _endTime,
         timeZone: timeZone
       })
     }
@@ -72,3 +80,13 @@ export async function POST(req: NextRequest) {
 }
 
 
+
+const formattedDate = (date: number, timeZone: string) => new Date(new Intl.DateTimeFormat('en-US', {
+  year: "numeric",
+  month: "numeric",
+  day: "numeric",
+  hour: "numeric",
+  minute: "numeric",
+  second: "numeric",
+  timeZone
+}).format(date));
