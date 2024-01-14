@@ -1,7 +1,6 @@
 import { syncUserRecords } from "@/lib/actions/database/common";
 import { getUserDetails } from "@/lib/actions/database/user";
 import prisma from "@/lib/prisma";
-import _ from "lodash";
 import { NextRequest, NextResponse } from "next/server";
 
 export const maxDuration = 200;
