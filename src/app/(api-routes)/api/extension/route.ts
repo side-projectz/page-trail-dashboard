@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const email = body?.email;
     const newRecords = body?.data;
-    const timeZone = body?.timeZone;
+    const timeZone = body?.timeZone || 'Asia/Calcutta';
 
     if (!email) throw new Error("Email is required");
     if (typeof email !== "string") throw new Error("Email should be a string");
