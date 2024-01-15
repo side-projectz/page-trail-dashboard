@@ -1,13 +1,9 @@
 import DashboardCard, { DashboardCardProps } from "@/components/dashboard/card";
-import DevLog from "@/components/dev-log";
 import { User, Globe, DollarSign } from "lucide-react";
 
 import { getAllDomains } from "@/lib/actions/database/domain";
 import { getAllSites } from "@/lib/actions/database/site";
 import { getAllUsers } from "@/lib/actions/database/user";
-import DashboardChart from "@/components/dashboard/chart";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DashboardTable } from "@/components/dashboard/table";
 import { UserDashboardTable } from "@/components/dashboard/users/table";
 
 export default async function UsersDashboard() {
@@ -56,7 +52,6 @@ export default async function UsersDashboard() {
 
       </div>
 
-      <DevLog data={usersCount} title="users" />
     </>
   );
 

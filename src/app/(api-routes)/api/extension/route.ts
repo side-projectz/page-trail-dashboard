@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const email = body?.email;
     const newRecords = body?.data;
-    const timeZone = body?.timeZone ?? "Asia/Calcutta";
+    let timeZone = body?.timeZone || "Asia/Kolkata";
 
     if (!email) throw new Error("Email is required");
     if (typeof email !== "string") throw new Error("Email should be a string");
@@ -27,6 +27,9 @@ export async function POST(req: NextRequest) {
     if (!timeZone) throw new Error("Time Zone is required");
     if (typeof timeZone !== "string")
       throw new Error("Time Zone should be a string");
+
+    if (timeZone === "Asia/Calcutta") timeZone = "Asia/Kolkata";
+
     if (!Intl.DateTimeFormat().resolvedOptions().timeZone.includes(timeZone))
       throw new Error("Invalid Time Zone");
 
