@@ -30,8 +30,10 @@ export async function POST(req: NextRequest) {
 
     if (timeZone === "Asia/Calcutta") timeZone = "Asia/Kolkata";
 
-    if (!Intl.DateTimeFormat().resolvedOptions().timeZone.includes(timeZone))
-      throw new Error("Invalid Time Zone. Received " + timeZone + " instead of " + Intl.DateTimeFormat().resolvedOptions().timeZone);
+    const tzIndex = Intl.supportedValuesOf('timeZone').findIndex((tz) => tz === timeZone);
+
+    if (tzIndex === -1)
+      throw new Error("Invalid Time Zone. Received " + timeZone);
 
     if (!newRecords) throw new Error("New Records is required");
 
