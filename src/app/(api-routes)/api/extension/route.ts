@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     if (timeZone === "Asia/Calcutta") timeZone = "Asia/Kolkata";
 
     if (!Intl.DateTimeFormat().resolvedOptions().timeZone.includes(timeZone))
-      throw new Error("Invalid Time Zone");
+      throw new Error("Invalid Time Zone. Received " + timeZone + " instead of " + Intl.DateTimeFormat().resolvedOptions().timeZone);
 
     if (!newRecords) throw new Error("New Records is required");
 
