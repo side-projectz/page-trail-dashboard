@@ -30,7 +30,9 @@ export async function POST(req: NextRequest) {
 
     if (timeZone === "Asia/Kolkata") timeZone = "Asia/Calcutta";
 
-    const tzIndex = Intl.supportedValuesOf('timeZone').findIndex((tz) => tz === timeZone);
+    const tzIndex = Intl.supportedValuesOf("timeZone").findIndex(
+      (tz) => tz === timeZone,
+    );
 
     if (tzIndex === -1)
       throw new Error("Invalid Time Zone. Received " + timeZone);
@@ -49,9 +51,6 @@ export async function POST(req: NextRequest) {
     const pages = newRecords.map((record: any) => record.pages).flat();
 
     for (const site of pages) {
-      const _startTime = formattedDate(site.openedAt, timeZone);
-      const _endTime = formattedDate(site.lastVisited, timeZone);
-
       const res = await syncUserRecords(email, {
         url: site.page,
         meta_title: site.meta.title,
@@ -59,8 +58,8 @@ export async function POST(req: NextRequest) {
         meta_image: site.meta.image || "",
         domain_name: site.domain,
         userId: email,
-        startDateTime: _startTime,
-        endDateTime: _endTime,
+        startDateTime: site.startDateTime,
+        endDateTime: site.endDateTime,
         timeZone: timeZone,
       });
     }
