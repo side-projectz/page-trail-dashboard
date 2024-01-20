@@ -11,20 +11,30 @@ type syncUserRecordsBody = {
   meta_image: string;
   domain_name: string;
   userId: string;
-  startDateTime: Date |string ;
+  startDateTime: Date | string;
   endDateTime: Date | string;
   timeZone: string;
-}
+};
 
-
-export async function syncUserRecords(email: string, body: syncUserRecordsBody) {
+export async function syncUserRecords(
+  email: string,
+  body: syncUserRecordsBody,
+) {
   try {
     // const body = await req.json();
-    const { url, meta_title, meta_description, meta_image, domain_name, userId } = body;
-    const { startDateTime, endDateTime } = body
+    const {
+      url,
+      meta_title,
+      meta_description,
+      meta_image,
+      domain_name,
+      userId,
+    } = body;
+    const { startDateTime, endDateTime } = body;
 
     if (!userId) throw new Error("User Id is required");
-    if (userId && typeof userId !== "string") throw new Error("User Id should be a string");
+    if (userId && typeof userId !== "string")
+      throw new Error("User Id should be a string");
 
     const userDetails = await getUserDetails(userId);
 
@@ -34,7 +44,8 @@ export async function syncUserRecords(email: string, body: syncUserRecordsBody) 
     if (typeof url !== "string") throw new Error("Url should be a string");
 
     if (!domain_name) throw new Error("Domain Name is required");
-    if (typeof domain_name !== "string") throw new Error("Domain Name should be a string");
+    if (typeof domain_name !== "string")
+      throw new Error("Domain Name should be a string");
 
     if (!startDateTime) throw new Error("Start Date Time is required");
 
@@ -43,31 +54,40 @@ export async function syncUserRecords(email: string, body: syncUserRecordsBody) 
     const domainId = await getDomainId(domain_name);
     if (!domainId) throw new Error("Domain Name not found");
 
-    const pageId = await getPageId(url, meta_title, meta_description, meta_image, domainId);
+    const pageId = await getPageId(
+      url,
+      meta_title,
+      meta_description,
+      meta_image,
+      domainId,
+    );
     if (!pageId) throw new Error("Page Url not found");
 
     const site: ISite = {
       pageId,
       domainId,
       userId: userDetails.id,
-      startDateTime: typeof startDateTime === "string" ? new Date(startDateTime) : startDateTime,
-      endDateTime:  typeof endDateTime === "string" ? new Date(endDateTime) : endDateTime,
+      startDateTime:
+        typeof startDateTime === "string"
+          ? new Date(startDateTime)
+          : startDateTime,
+      endDateTime:
+        typeof endDateTime === "string" ? new Date(endDateTime) : endDateTime,
       timeZone: body.timeZone,
-    }
+    };
+
+    console.log(site);
 
     const siteRes = await addSite(site);
 
     return siteRes;
-
   } catch (error: any) {
-    console.log(error)
+    console.log(error);
     throw new Error(error.message);
   }
 }
 
-
 async function getDomainId(domain_name: string) {
-
   const domain = await getDomainByName(domain_name);
   // if(!domainId) throw new Error("Domain Name not found");
 
@@ -75,7 +95,9 @@ async function getDomainId(domain_name: string) {
   // save domain if not exists
   if (!domain) {
     const domainObj: IDomain = {
-      name: domain_name, createdAt: new Date(), updatedAt: new Date()
+      name: domain_name,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
     const domainRes = await addDomain(domainObj); //save domain
     domainId = domainRes.id;
@@ -86,23 +108,34 @@ async function getDomainId(domain_name: string) {
 }
 
 /**
- * Get page id 
- * @param url 
- * @param meta_title 
- * @param meta_description 
- * @param meta_image 
- * @param domainId 
- * @returns 
+ * Get page id
+ * @param url
+ * @param meta_title
+ * @param meta_description
+ * @param meta_image
+ * @param domainId
+ * @returns
  */
-async function getPageId(url: string, meta_title: string, meta_description: string, meta_image: string, domainId: string) {
-
+async function getPageId(
+  url: string,
+  meta_title: string,
+  meta_description: string,
+  meta_image: string,
+  domainId: string,
+) {
   const page = await getPageByUrl(url);
   // if(!page) throw new Error("Page Url not found");
 
   let pageId;
   if (!page) {
     const page: IPage = {
-      domainId: domainId, url: url, meta_title, meta_description, meta_image, createdAt: new Date(), updatedAt: new Date()
+      domainId: domainId,
+      url: url,
+      meta_title,
+      meta_description,
+      meta_image,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
 
     const pageRes = await addPage(page);

@@ -20,6 +20,7 @@ export async function POST(req: NextRequest) {
     const email = body?.email;
     const newRecords = body?.data;
     let timeZone = body?.timeZone || "Asia/Calcutta";
+    const version = body?.version;
 
     if (!email) throw new Error("Email is required");
     if (typeof email !== "string") throw new Error("Email should be a string");
@@ -48,18 +49,24 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const pages = newRecords.map((record: any) => record.pages).flat();
+    let pages;
+
+    if (version === "2.8.0") {
+      pages = newRecords;
+    } else {
+      pages = newRecords.map((record: any) => record.pages).flat();
+    }
 
     for (const site of pages) {
-      const res = await syncUserRecords(email, {
+      await syncUserRecords(email, {
         url: site.page,
         meta_title: site.meta.title,
         meta_description: site.meta.description,
         meta_image: site.meta.image || "",
         domain_name: site.domain,
         userId: email,
-        startDateTime: site.startDateTime,
-        endDateTime: site.endDateTime,
+        startDateTime: site.startDateTime ?? new Date(site.openedAt),
+        endDateTime: site.endDateTime ?? new Date(site.lastVisited),
         timeZone: timeZone,
       });
     }
