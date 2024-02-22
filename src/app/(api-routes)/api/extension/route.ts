@@ -6,12 +6,32 @@ import { NextRequest, NextResponse } from "next/server";
 export const maxDuration = 200;
 export const dynamic = "force-dynamic";
 
-export async function GET(req: Request) {
-  return NextResponse.json({
-    status: 200,
-    message: "API is working",
-    data: null,
+function createResponse(data: APIResponse<string | object>) {
+  return new Response(JSON.stringify(data), {
+    headers: {
+      "content-type": "application/json",
+    },
+    status: data.status,
   });
+}
+
+export async function GET() {
+  try {
+    await prisma.domain.findFirst();
+
+    return createResponse({
+      message: "API is working fine",
+      data: null,
+      status: 200,
+    });
+  } catch (e: any) {
+    console.error(e);
+    return createResponse({
+      message: "API is NOT working fine. " + e.message,
+      data: null,
+      status: 200,
+    });
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -20,7 +40,7 @@ export async function POST(req: NextRequest) {
     const email = body?.email;
     const newRecords = body?.data;
     let timeZone = body?.timeZone || "Asia/Calcutta";
-    const version = body?.version;
+    const version = body?.version.replace(".", "");
 
     if (!email) throw new Error("Email is required");
     if (typeof email !== "string") throw new Error("Email should be a string");
@@ -51,7 +71,7 @@ export async function POST(req: NextRequest) {
 
     let pages;
 
-    if (version === "2.8.0") {
+    if (Number(version) >= 280) {
       pages = newRecords;
     } else {
       pages = newRecords.map((record: any) => record.pages).flat();
@@ -73,13 +93,15 @@ export async function POST(req: NextRequest) {
 
     console.log("User Records Updated");
 
-    return NextResponse.json({
+    return createResponse({
       message: "User Records Updated",
       data: null,
       status: 200,
     });
   } catch (error: any) {
-    return NextResponse.json({
+    console.log("Error updating user records, " + error.message);
+
+    return createResponse({
       message: "Error updating user records, " + error.message,
       data: error,
       status: 500,
