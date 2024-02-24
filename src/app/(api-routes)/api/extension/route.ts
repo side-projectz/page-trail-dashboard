@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
     const email = body?.email;
     const newRecords = body?.data;
     let timeZone = body?.timeZone || "Asia/Calcutta";
-    const version = body?.version.replace(".", "");
+    const version = body?.version.replaceAll(".", "");
 
     if (!email) throw new Error("Email is required");
     if (typeof email !== "string") throw new Error("Email should be a string");
